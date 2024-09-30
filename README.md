@@ -11,7 +11,7 @@ restructure the data with respect to our unique trading strategy. We also includ
 Monthly Return Analysis.ipynb: This code calculates and attaches the monthly return for each firm from the CRSP database. It also merges the factors from the monthly Fama-French database
 (FF3 & FF5), Cahart 4-factors, Hou-Xue-Zhang q-factor and Hou-Mo-Xue-Zhang augmented factor. 
 
-Broker-Level Analysis : This code is used for the investment bank/ broker level cross section to select observations at each level.
+Broker-Level Analysis : This code is used for the investment bank/ broker level cross section to select observations at each sell-side firm.
 
 
 It is important to note that to implement this, we use the Unity Computing Cluster, a collaborative, multi-institutional high-performance computing cluster located at the Massachusetts Green High
