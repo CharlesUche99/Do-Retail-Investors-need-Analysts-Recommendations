@@ -3,6 +3,7 @@
 This repository provides the Python and STATA codes for our analysis for the Capstone project: Do Retail Investors Need Analysts’ Recommendations?
 
 We have added our initial code to the following GitHub repository as requested. There are currently three files in the repository:
+
 Data Cleaning and Organization.ipynb: This file pulls in our initial dataset from I/B/E/S for the analyst recommendations and CRSP for the daily level security trading prices. This is our initial
 cleaning and exploration file. We restructure the data weekly and monthly for the latest recommendation for each firm issued within the prior three months. This code file allows us to
 restructure the data with respect to our unique trading strategy. We also include the Fama-French industry classifications.
