@@ -1,5 +1,7 @@
 *Working for Period 1992 to 1999
-use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return.dta", clear
+use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return_fama.dta", clear
+
+drop year_month
 
 * Create year_month variable
 gen year_month = ym(year, month)
@@ -26,12 +28,12 @@ putexcel set "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Deskt
 putexcel A1 = "Equal Weighted Returns" B1 = "T-statistics" C1 = "Value Weighted Returns" D1 = "T-statistics"
 
 *Excess return EW
-portfolio month_return_winsorized, groupby(year_month avg_ireccd) nq(10) rf(RF) all
+portfolio month_return_winsorized , groupby(year_month avg_ireccd) nq(5) cv(prior_month_avg_cap) cvnq(5) rf(RF) all
 matrix ew_res = r(result)
 matrix ew_res_t = r(tstat)
 
 *Excess return VW
-portfolio month_return_winsorized, groupby(year_month avg_ireccd) w(prior_month_avg_cap) nq(10) rf(RF) all
+portfolio month_return_winsorized, groupby(year_month avg_ireccd) w(prior_month_avg_cap) nq(5) cv(prior_month_avg_cap) cvnq(5) rf(RF) all
 matrix ew_res = r(result)
 matrix ew_res_t = r(tstat)
 
@@ -103,7 +105,7 @@ matrix final_matrix = ew_res \ ew_res_t \ vw_res \ vw_res_t
 
 
 ***********************************************************************
-use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return.dta", clear
+use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return_fama.dta", clear
 
 * Create year_month variable
 gen year_month = ym(year, month)
@@ -242,7 +244,9 @@ foreach group in `broker' {
 
 ***********************Fama-McBeth Regression*************************************
 *Working for Period 1992 to 1999
-use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return.dta", clear
+use "C:\Users\uchen\OneDrive - University of Massachusetts Boston\Desktop\Papers\Capstone Ideas\Analyst Recommendation\Data\rec_return_fama.dta", clear
+
+drop year_month
 
 * Create year_month variable
 gen year_month = ym(year, month)
@@ -250,9 +254,12 @@ gen year_month = ym(year, month)
 * Format the year_month variable as a Stata monthly date
 format year_month %tm
 
-sort cusip year_month
+* Sort the dataset
+sort year month
 
-encode cusip, gen(cusip_num)
+sort cusip_x year_month
+
+encode cusip_x, gen(cusip_num)
 
 xtset cusip_num year_month
 
@@ -271,8 +278,16 @@ drop _Nobs _R2 _adjR2 _b_cons
 
 *Fama McBeth Reg
 //Step0 : Timeseries Regression
-bys cusip_num: asreg month_return_winsorized avg_ireccd _b_Rm prior_month_avg_cap
+asreg month_return_winsorized avg_ireccd _b_Rm Size_qtr BM_qtr Rt_1 Rt_12_t_2 Rt_60_t_13 ILLIQ_prior IVOL_prior AG CBOP Accruals, fmb
 
 //Step1 and 2 : Crossectional Regression and averages
 drop _R2 _adjR2
-asreg month_return_winsorized _b_avg_ireccd _b__b_Rm _b_prior_month_avg_cap, fmb newey(2)
+asreg month_return_winsorized _b_avg_ireccd _b__b_Rm _b_Size_yearly _b_BM_yearly Size_qtr, fmb
+
+*Fama McBeth Reg
+//Step0 : Timeseries Regression
+bys cusip_num: asreg month_return_winsorized avg_ireccd Rt_1 Rt_12_t_2 Rt_60_t_13 prior_month_avg_cap ILLIQ_prior IVOL_prior
+
+//Step1 and 2 : Crossectional Regression and averages
+drop _R2 _adjR2
+asreg month_return_winsorized _b_avg_ireccd _b_Rt_1 _b_Rt_12_t_2 _b_Rt_60_t_13 _b_prior_month_avg_cap _b_ILLIQ_prior _b_IVOL_prior, fmb
