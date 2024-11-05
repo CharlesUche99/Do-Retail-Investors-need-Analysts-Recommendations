@@ -2,7 +2,7 @@
 
 This repository provides the Python and STATA codes for our analysis for the Capstone project: Do Retail Investors Need Analysts’ Recommendations?
 
-We have added our initial code to the following GitHub repository. There are currently three files in the repository:
+We have added our initial code to the following GitHub repository. There are currently four code files in the repository:
 
 Data Cleaning and Organization.ipynb: This file pulls in our initial dataset from I/B/E/S for the analyst recommendations and CRSP for the daily level security trading prices. This is our initial
 cleaning and exploration file. We restructure the data weekly and monthly for the latest recommendation for each firm issued within the prior three months. This code file allows us to
@@ -11,7 +11,7 @@ restructure the data with respect to our unique trading strategy. We also includ
 Monthly Return Analysis.ipynb: This code calculates and attaches the monthly return for each firm from the CRSP database. It also merges the factors from the monthly Fama-French database
 (FF3 & FF5), Cahart 4-factors, Hou-Xue-Zhang q-factor and Hou-Mo-Xue-Zhang augmented factor. This code also outputs another dataset for the Fama-McBeth Robustness test which includes firm fundamentals. 
 
-Broker-Level Data : This code is used for the investment bank/ broker level cross section to select observations at each sell-side firm.
+Broker-Level Data: This code is used for the investment bank/ broker level cross section to select observations at each sell-side firm.
 
 Period Do File: This is a STATA command file for all analysis and tables included in our results using the datafiles. We have included the links for the datafiles below. 
 
